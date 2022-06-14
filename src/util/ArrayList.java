@@ -1,6 +1,5 @@
 package util;
 
-import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -250,7 +249,9 @@ public class ArrayList<E> implements List<E> {
      */
     private void grow() {
         int newCapacity = (elementData.length * 3) / 2 + 1;
-        elementData = Arrays.copyOf(elementData, newCapacity);
+        E[] newArray = (E[]) new Object[newCapacity];
+        System.arraycopy(elementData, 0, newArray, 0, nElems);
+        elementData = newArray;
     }
 
     /**
