@@ -148,7 +148,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Returns true if this list contains the specified element.
+     * Returns {@code true} if this list contains the specified element.
      *
      * @param element element whose presence in this list is to be checked
      * @return {@code true} if this list contains the specified element.
@@ -189,6 +189,24 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
+     * Sorts this list according to the natural order. All elements in this list
+     * must implement the Comparable interface. Does nothing when the list is empty.
+     *
+     * @throws IllegalArgumentException if the objects do not implement {@code Comparable}
+     */
+    @Override
+    public void sort() {
+        if (isEmpty()) {
+            return;
+        }
+        if (elementData(0) instanceof Comparable) {
+            quickSortComparable(0, nElems - 1);
+        } else {
+            throw new IllegalArgumentException("For sorting the type must implement Comparable");
+        }
+    }
+
+    /**
      * Sorts this list according to the order induced by the specified Comparator.
      * All elements in this list must be mutually comparable using the specified
      * comparator (that is, c.compare(e1, e2) must not throw a ClassCastException
@@ -212,26 +230,6 @@ public class ArrayList<E> implements List<E> {
             sort();
         }
         quickSortComparator(0, nElems - 1, c);
-    }
-
-    /**
-     * Sorts this list according to the natural order. All elements in this list
-     * must implement the Comparable interface. Does nothing when the list is empty.
-     *
-     * @throws ClassCastException       if the list contains elements that are not
-     *                                  mutually comparable using the specified comparator
-     * @throws IllegalArgumentException if the objects do not implement {@code Comparable}
-     */
-    @Override
-    public void sort() {
-        if (isEmpty()) {
-            return;
-        }
-        if (elementData(0) instanceof Comparable) {
-            quickSortComparable(0, nElems - 1);
-        } else {
-            throw new IllegalArgumentException("For sorting the type must implement Comparable");
-        }
     }
 
 

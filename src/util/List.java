@@ -97,6 +97,16 @@ public interface List<E> {
     boolean isEmpty();
 
     /**
+     * Sorts this list according to the natural order. All elements in this list
+     * must implement the Comparable interface. Does nothing when the list is empty.
+     *
+     * @throws ClassCastException if the list contains elements that are not
+     *         mutually comparable using the specified comparator
+     * @throws IllegalArgumentException if the objects do not implement {@code Comparable}
+     */
+    void sort();
+
+    /**
      * Sorts this list according to the order induced by the specified Comparator.
      * All elements in this list must be mutually comparable using the specified
      * comparator (that is, c.compare(e1, e2) must not throw a ClassCastException
@@ -112,14 +122,4 @@ public interface List<E> {
      *         if the objects do not implement {@code Comparable}
      */
     void sort(Comparator<? super E> c);
-
-    /**
-     * Sorts this list according to the natural order. All elements in this list
-     * must implement the Comparable interface. Does nothing when the list is empty.
-     *
-     * @throws ClassCastException if the list contains elements that are not
-     *         mutually comparable using the specified comparator
-     * @throws IllegalArgumentException if the objects do not implement {@code Comparable}
-     */
-    void sort();
 }
