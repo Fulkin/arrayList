@@ -26,7 +26,5 @@
    
 8. `isEmpty()`: returns true if this list contains no elements;
    
-8. `sort()`: natural sorts the list if the element supports interface Comparable using quicksort;
-   
-9. `sort(Comparator<? super E> c)`: sorts the list based on the Comparator interface using quicksort;
+9. `sort(Comparator<? super E> c)`: sorts the list based on the Comparator interface using quicksort, if `(c == null)` compare elements in natural order;
 

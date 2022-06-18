@@ -189,47 +189,24 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Sorts this list according to the natural order. All elements in this list
-     * must implement the Comparable interface. Does nothing when the list is empty.
-     *
-     * @throws IllegalArgumentException if the objects do not implement {@code Comparable}
-     */
-    @Override
-    public void sort() {
-        if (isEmpty()) {
-            return;
-        }
-        if (elementData(0) instanceof Comparable) {
-            quickSortComparable(0, nElems - 1);
-        } else {
-            throw new IllegalArgumentException("For sorting the type must implement Comparable");
-        }
-    }
-
-    /**
-     * Sorts this list according to the order induced by the specified Comparator.
-     * All elements in this list must be mutually comparable using the specified
-     * comparator (that is, c.compare(e1, e2) must not throw a ClassCastException
-     * for any elements e1 and e2 in the list). If the specified comparator is null
-     * then all elements in this list must implement the Comparable interface and
-     * the elements' natural ordering should be used. Does nothing when the list is empty.
+     * All elements in this list must be mutually comparable using the specified comparator
+     * (that is, c.compare(e1, e2) must not throw a ClassCastException for any elements
+     * e1 and e2 in the list). If the specified comparator is null then all elements in this
+     * list must implement the Comparable interface otherwise throw {@code IllegalArgumentException}.
+     * Does nothing when the list is empty.
      *
      * @param c - the Comparator used to compare list elements.
-     *          A null value indicates that the elements' natural ordering should be used
-     * @throws ClassCastException       if the list contains elements that are not
-     *                                  mutually comparable using the specified comparator
-     * @throws IllegalArgumentException if the {@code Comparator} is null and
-     *                                  if the objects do not implement {@code Comparable}
+     *          A null value indicates that the elements' natural ordering should be used,
+     *          may be null
+     * @throws ClassCastException if the list contains elements that are not mutually comparable using
+     *                            the specified comparator or do not implement {@code Comparable} interface
      */
     @Override
     public void sort(Comparator<? super E> c) {
         if (isEmpty()) {
             return;
         }
-        if (c == null) {
-            sort();
-        }
-        quickSortComparator(0, nElems - 1, c);
+        ArraysUtil.sort((E[]) elementData, 0, nElems - 1, c);
     }
 
 
@@ -238,7 +215,7 @@ public class ArrayList<E> implements List<E> {
      */
 
     @SuppressWarnings("unchecked")
-    private <E> E elementData(int index) {
+    private E elementData(int index) {
         return (E) elementData[index];
     }
 
@@ -247,7 +224,7 @@ public class ArrayList<E> implements List<E> {
      */
     private void grow() {
         int newCapacity = (elementData.length * 3) / 2 + 1;
-        E[] newArray = (E[]) new Object[newCapacity];
+        Object[] newArray = new Object[newCapacity];
         System.arraycopy(elementData, 0, newArray, 0, nElems);
         elementData = newArray;
     }
@@ -261,7 +238,8 @@ public class ArrayList<E> implements List<E> {
         int newSize;
         if ((newSize = nElems - 1) > i) {
             System.arraycopy(elementData, i + 1, elementData, i, newSize - i);
-            elementData[nElems = newSize] = null;
+            nElems = newSize;
+            elementData[nElems] = null;
         }
     }
 
@@ -276,95 +254,5 @@ public class ArrayList<E> implements List<E> {
         if (index > nElems || index < 0) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + nElems);
         }
-    }
-
-    /**
-     * Quicksort implementation for natural order.
-     *
-     * @param start - the left element of the subarray
-     * @param end - the right element of the subarray
-     * @param <E> - the type of elements in this list
-     */
-    private <E extends Comparable<? super E>> void quickSortComparable(int start, int end) {
-        if (isEmpty() || start >= end) {
-            return;
-        }
-
-        int centre = start + (end - start) / 2;
-
-        E elementCentre = elementData(centre);
-        int i = start, j = end;
-        while (i <= j) {
-            while (elementCentre.compareTo(elementData(i)) > 0) {
-                i++;
-            }
-            while (elementCentre.compareTo(elementData(j)) < 0) {
-                j--;
-            }
-            if (i <= j) {
-                swap(i, j);
-                i++;
-                j--;
-            }
-        }
-
-        if (start < j) {
-            quickSortComparable(start, j);
-        }
-        if (end > i) {
-            quickSortComparable(i, end);
-        }
-    }
-
-    /**
-     *
-     * Quicksort implementation with Comparator.
-     *
-     * @param start - the left element of the subarray
-     * @param end - the right element of the subarray
-     * @param c - Comparator that is used in element comparison
-     */
-    private void quickSortComparator(int start, int end, Comparator<? super E> c) {
-        if (start >= end) {
-            return;
-        }
-
-        int centre = start + (end - start) / 2;
-
-        E elementCentre = elementData(centre);
-        int i = start, j = end;
-        while (i <= j) {
-            while (c.compare(elementCentre, elementData(i)) > 0) {
-                i++;
-            }
-            while (c.compare(elementCentre, elementData(j)) < 0) {
-                j--;
-            }
-            if (i <= j) {
-                swap(i, j);
-                i++;
-                j--;
-            }
-        }
-
-        if (start < j) {
-            quickSortComparator(start, j, c);
-        }
-        if (end > i) {
-            quickSortComparator(i, end, c);
-        }
-    }
-
-    /**
-     * changing each other's indexes for sorting
-     *
-     * @param i - index of first element
-     * @param j - index of second element
-     * @param <E> - the type of elements in this list
-     */
-    private <E> void swap(int i, int j) {
-        E tmp = elementData(i);
-        elementData[i] = elementData(j);
-        elementData[j] = tmp;
     }
 }
